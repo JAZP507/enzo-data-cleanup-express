@@ -3,15 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Herramienta de muestra para limpiar CSVs y pedir una limpieza completa de datos por $49 USDC.">
+    <meta property="og:title" content="Limpieza express de datos - ENZO">
+    <meta property="og:description" content="Pega un CSV, ve una muestra limpia y pide el archivo completo por $49 USDC.">
+    <meta property="og:type" content="website">
     <title>Limpieza express de datos - ENZO</title>
     <style>
       :root {
         color-scheme: light;
         --ink: #171717;
-        --muted: #5f6368;
+        --muted: #5c6268;
         --line: #d8ded8;
         --panel: #f6f8f6;
+        --panel-strong: #eef3ee;
         --accent: #107c41;
+        --accent-dark: #0b6031;
+        --warn: #8a4b00;
       }
       * { box-sizing: border-box; }
       body {
@@ -22,13 +29,13 @@
         line-height: 1.45;
       }
       main {
-        width: min(860px, calc(100% - 32px));
+        width: min(1100px, calc(100% - 32px));
         margin: 0 auto;
-        padding: 44px 0;
+        padding: 34px 0 46px;
       }
       h1 {
-        margin: 0 0 12px;
-        font-size: clamp(32px, 6vw, 56px);
+        margin: 0 0 10px;
+        font-size: clamp(32px, 6vw, 58px);
         line-height: 1;
         letter-spacing: 0;
       }
@@ -41,33 +48,123 @@
         color: var(--muted);
         font-size: 18px;
       }
+      .topline {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin: 18px 0 24px;
+      }
       .price {
-        margin: 24px 0;
-        padding: 18px 20px;
+        min-height: 44px;
+        padding: 10px 12px;
         border: 1px solid var(--line);
         background: var(--panel);
+        font-weight: 700;
       }
-      .price strong {
-        display: block;
-        color: var(--ink);
-        font-size: 30px;
-        margin-bottom: 4px;
-      }
-      ul {
-        margin: 0 0 22px;
-        padding-left: 22px;
+      .price span {
         color: var(--muted);
-        font-size: 17px;
+        font-weight: 400;
       }
-      li { margin: 8px 0; }
-      a.button {
-        display: inline-block;
-        min-height: 46px;
-        padding: 13px 18px;
+      .button,
+      button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 11px 15px;
+        border: 1px solid var(--accent);
         background: var(--accent);
         color: #ffffff;
         text-decoration: none;
+        font: inherit;
         font-weight: 700;
+        cursor: pointer;
+      }
+      .button:hover,
+      button:hover { background: var(--accent-dark); }
+      .button.secondary,
+      button.secondary {
+        background: #ffffff;
+        color: var(--accent-dark);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+        gap: 22px;
+        align-items: start;
+      }
+      textarea {
+        width: 100%;
+        min-height: 320px;
+        resize: vertical;
+        padding: 14px;
+        border: 1px solid var(--line);
+        color: var(--ink);
+        font: 14px/1.45 Consolas, "Courier New", monospace;
+        background: #ffffff;
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .metric {
+        padding: 12px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        min-height: 76px;
+      }
+      .metric strong {
+        display: block;
+        font-size: 26px;
+        line-height: 1.1;
+      }
+      .metric span {
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .note {
+        margin-top: 12px;
+        padding: 12px;
+        border-left: 4px solid var(--accent);
+        background: var(--panel);
+        color: var(--muted);
+      }
+      section {
+        border-top: 1px solid var(--line);
+        padding-top: 24px;
+        margin-top: 28px;
+      }
+      .preview-wrap {
+        max-width: 100%;
+        overflow: auto;
+        border: 1px solid var(--line);
+        background: #ffffff;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 640px;
+      }
+      th,
+      td {
+        border-bottom: 1px solid var(--line);
+        padding: 9px 10px;
+        text-align: left;
+        vertical-align: top;
+        font-size: 14px;
+      }
+      th {
+        background: var(--panel-strong);
+        position: sticky;
+        top: 0;
       }
       code {
         display: block;
@@ -77,30 +174,70 @@
         background: #ffffff;
         color: var(--ink);
       }
-      section {
-        border-top: 1px solid var(--line);
-        padding-top: 24px;
-        margin-top: 28px;
+      ul {
+        margin: 0 0 22px;
+        padding-left: 22px;
+        color: var(--muted);
+        font-size: 17px;
+      }
+      li { margin: 8px 0; }
+      .warning { color: var(--warn); }
+      @media (max-width: 860px) {
+        .grid { grid-template-columns: 1fr; }
+        textarea { min-height: 260px; }
       }
     </style>
   </head>
   <body>
     <main>
       <h1>Limpieza express de datos</h1>
-      <p>ENZO limpia, normaliza y entrega archivos CSV o catalogos de productos para negocios que necesitan datos usables hoy.</p>
+      <p>Pega un CSV y ve una muestra limpia al instante. Para el archivo completo, ENZO entrega hasta 500 filas normalizadas por precio fijo.</p>
 
-      <div class="price">
-        <strong>$49 USDC</strong>
-        Hasta 500 filas. Entrega: archivo limpio + resumen de cambios.
+      <div class="topline">
+        <div class="price">$49 USDC <span>hasta 500 filas</span></div>
+        <a class="button" href="https://tally.so/r/GxbXEp">Pedir limpieza completa</a>
+        <button class="secondary" type="button" id="loadSample">Cargar ejemplo</button>
       </div>
 
-      <a class="button" href="https://tally.so/r/GxbXEp">Pedir limpieza express</a>
+      <div class="grid">
+        <div>
+          <h2>CSV de muestra</h2>
+          <textarea id="csvInput" spellcheck="false" placeholder="Pega aqui tu CSV. Ejemplo:&#10;Product Name, Price , Tags&#10;  Blue Shirt , 19.99 , summer | clothes&#10;Blue Shirt,19.99,summer | clothes"></textarea>
+          <div class="controls">
+            <button type="button" id="cleanButton">Limpiar muestra</button>
+            <button class="secondary" type="button" id="downloadSample" disabled>Descargar muestra limpia</button>
+          </div>
+          <p class="note">La herramienta procesa una muestra en tu navegador. Para recibir el archivo completo y el resumen de cambios, usa el pedido pagado.</p>
+        </div>
+
+        <aside>
+          <h2>Resultado</h2>
+          <div class="summary">
+            <div class="metric"><strong id="rowCount">0</strong><span>filas detectadas</span></div>
+            <div class="metric"><strong id="duplicateCount">0</strong><span>duplicados exactos</span></div>
+            <div class="metric"><strong id="columnCount">0</strong><span>columnas</span></div>
+            <div class="metric"><strong id="sampleCount">0</strong><span>filas en muestra</span></div>
+          </div>
+          <p id="statusText" class="note">Pega un CSV para ver la normalizacion.</p>
+        </aside>
+      </div>
 
       <section>
-        <h2>Incluye</h2>
+        <h2>Vista limpia</h2>
+        <div class="preview-wrap" id="previewWrap">
+          <table id="previewTable">
+            <thead><tr><th>Sin datos</th></tr></thead>
+            <tbody><tr><td>Pega un CSV y presiona limpiar.</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>Incluye el servicio completo</h2>
         <ul>
-          <li>Correccion de nombres, categorias, tags y campos vacios.</li>
-          <li>Deduplicacion basica y normalizacion de columnas.</li>
+          <li>Normalizacion de headers a snake_case.</li>
+          <li>Limpieza de espacios, campos vacios, categorias y tags.</li>
+          <li>Deduplicacion basica de filas exactas.</li>
           <li>Archivo final listo para importar o revisar.</li>
           <li>Resumen corto de cambios realizados.</li>
         </ul>
@@ -112,5 +249,182 @@
         <code>0x534234c114c89b02829655d158034ea98c24a744</code>
       </section>
     </main>
+
+    <script>
+      const sampleCsv = `Product Name, Price , Tags, Description
+  Blue Shirt , 19.99 , summer | clothes, cotton shirt
+Blue Shirt,19.99,summer | clothes,cotton shirt
+Red Shoes, 49.5, footwear | sale,  running shoes
+Coffee Mug,, kitchen, ceramic mug`;
+
+      const input = document.getElementById("csvInput");
+      const cleanButton = document.getElementById("cleanButton");
+      const loadSample = document.getElementById("loadSample");
+      const downloadSample = document.getElementById("downloadSample");
+      const statusText = document.getElementById("statusText");
+      const previewTable = document.getElementById("previewTable");
+      let lastCleanCsv = "";
+
+      loadSample.addEventListener("click", () => {
+        input.value = sampleCsv;
+        cleanCsv();
+      });
+      cleanButton.addEventListener("click", cleanCsv);
+      downloadSample.addEventListener("click", () => {
+        if (!lastCleanCsv) return;
+        const blob = new Blob([lastCleanCsv], { type: "text/csv;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "enzo-cleaned-sample.csv";
+        link.click();
+        URL.revokeObjectURL(url);
+      });
+
+      function cleanCsv() {
+        const text = input.value.trim();
+        if (!text) {
+          setStatus("Pega un CSV para ver la normalizacion.", true);
+          renderEmpty();
+          return;
+        }
+        try {
+          const parsed = parseCsv(text);
+          if (parsed.length < 2) {
+            setStatus("El CSV necesita headers y al menos una fila.", true);
+            renderEmpty();
+            return;
+          }
+          const headers = parsed[0].map(normalizeHeader);
+          const seen = new Set();
+          const cleanRows = [];
+          let duplicates = 0;
+          parsed.slice(1).forEach((row) => {
+            const clean = headers.map((_, index) => cleanCell(row[index] || ""));
+            const key = JSON.stringify(clean);
+            if (seen.has(key)) {
+              duplicates += 1;
+              return;
+            }
+            seen.add(key);
+            cleanRows.push(clean);
+          });
+          const sampleRows = cleanRows.slice(0, 25);
+          lastCleanCsv = toCsv([headers, ...sampleRows]);
+          renderTable(headers, sampleRows);
+          setMetric("rowCount", parsed.length - 1);
+          setMetric("duplicateCount", duplicates);
+          setMetric("columnCount", headers.length);
+          setMetric("sampleCount", sampleRows.length);
+          downloadSample.disabled = sampleRows.length === 0;
+          setStatus(`Muestra limpia lista. ${cleanRows.length} filas unicas detectadas.`, false);
+        } catch (error) {
+          setStatus(error.message || "No pude leer ese CSV.", true);
+          renderEmpty();
+        }
+      }
+
+      function parseCsv(text) {
+        const rows = [];
+        let row = [];
+        let cell = "";
+        let quoted = false;
+        for (let index = 0; index < text.length; index += 1) {
+          const char = text[index];
+          const next = text[index + 1];
+          if (quoted && char === "\"" && next === "\"") {
+            cell += "\"";
+            index += 1;
+          } else if (char === "\"") {
+            quoted = !quoted;
+          } else if (char === "," && !quoted) {
+            row.push(cell);
+            cell = "";
+          } else if ((char === "\n" || char === "\r") && !quoted) {
+            if (char === "\r" && next === "\n") index += 1;
+            row.push(cell);
+            if (row.some((value) => value.trim() !== "")) rows.push(row);
+            row = [];
+            cell = "";
+          } else {
+            cell += char;
+          }
+        }
+        row.push(cell);
+        if (row.some((value) => value.trim() !== "")) rows.push(row);
+        if (quoted) throw new Error("Hay comillas sin cerrar en el CSV.");
+        return rows;
+      }
+
+      function normalizeHeader(value) {
+        const normalized = value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+        return normalized || "field";
+      }
+
+      function cleanCell(value) {
+        return value.replace(/\s+/g, " ").trim();
+      }
+
+      function toCsv(rows) {
+        return rows.map((row) => row.map(escapeCsv).join(",")).join("\n") + "\n";
+      }
+
+      function escapeCsv(value) {
+        if (/[",\n\r]/.test(value)) return `"${value.replace(/"/g, "\"\"")}"`;
+        return value;
+      }
+
+      function renderTable(headers, rows) {
+        previewTable.innerHTML = "";
+        const thead = document.createElement("thead");
+        const headRow = document.createElement("tr");
+        headers.forEach((header) => {
+          const th = document.createElement("th");
+          th.textContent = header;
+          headRow.appendChild(th);
+        });
+        thead.appendChild(headRow);
+        previewTable.appendChild(thead);
+
+        const tbody = document.createElement("tbody");
+        rows.forEach((row) => {
+          const tr = document.createElement("tr");
+          headers.forEach((_, index) => {
+            const td = document.createElement("td");
+            td.textContent = row[index] || "";
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+        if (!rows.length) {
+          const tr = document.createElement("tr");
+          const td = document.createElement("td");
+          td.colSpan = headers.length || 1;
+          td.textContent = "No hay filas limpias para mostrar.";
+          tr.appendChild(td);
+          tbody.appendChild(tr);
+        }
+        previewTable.appendChild(tbody);
+      }
+
+      function renderEmpty() {
+        lastCleanCsv = "";
+        downloadSample.disabled = true;
+        setMetric("rowCount", 0);
+        setMetric("duplicateCount", 0);
+        setMetric("columnCount", 0);
+        setMetric("sampleCount", 0);
+        previewTable.innerHTML = "<thead><tr><th>Sin datos</th></tr></thead><tbody><tr><td>Pega un CSV y presiona limpiar.</td></tr></tbody>";
+      }
+
+      function setMetric(id, value) {
+        document.getElementById(id).textContent = String(value);
+      }
+
+      function setStatus(message, warning) {
+        statusText.textContent = message;
+        statusText.classList.toggle("warning", Boolean(warning));
+      }
+    </script>
   </body>
 </html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jazp507.github.io/enzo-data-cleanup-express/sitemap.xml
