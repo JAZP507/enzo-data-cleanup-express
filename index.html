@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Limpieza express de datos - ENZO</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #171717;
+        --muted: #5f6368;
+        --line: #d8ded8;
+        --panel: #f6f8f6;
+        --accent: #107c41;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--ink);
+        background: #ffffff;
+        line-height: 1.45;
+      }
+      main {
+        width: min(860px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 44px 0;
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(32px, 6vw, 56px);
+        line-height: 1;
+        letter-spacing: 0;
+      }
+      h2 {
+        margin: 0 0 12px;
+        font-size: 22px;
+      }
+      p {
+        margin: 0 0 16px;
+        color: var(--muted);
+        font-size: 18px;
+      }
+      .price {
+        margin: 24px 0;
+        padding: 18px 20px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+      }
+      .price strong {
+        display: block;
+        color: var(--ink);
+        font-size: 30px;
+        margin-bottom: 4px;
+      }
+      ul {
+        margin: 0 0 22px;
+        padding-left: 22px;
+        color: var(--muted);
+        font-size: 17px;
+      }
+      li { margin: 8px 0; }
+      a.button {
+        display: inline-block;
+        min-height: 46px;
+        padding: 13px 18px;
+        background: var(--accent);
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 700;
+      }
+      code {
+        display: block;
+        padding: 12px;
+        border: 1px solid var(--line);
+        overflow-wrap: anywhere;
+        background: #ffffff;
+        color: var(--ink);
+      }
+      section {
+        border-top: 1px solid var(--line);
+        padding-top: 24px;
+        margin-top: 28px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Limpieza express de datos</h1>
+      <p>ENZO limpia, normaliza y entrega archivos CSV o catalogos de productos para negocios que necesitan datos usables hoy.</p>
+
+      <div class="price">
+        <strong>$49 USDC</strong>
+        Hasta 500 filas. Entrega: archivo limpio + resumen de cambios.
+      </div>
+
+      <a class="button" href="https://tally.so/r/GxbXEp">Pedir limpieza express</a>
+
+      <section>
+        <h2>Incluye</h2>
+        <ul>
+          <li>Correccion de nombres, categorias, tags y campos vacios.</li>
+          <li>Deduplicacion basica y normalizacion de columnas.</li>
+          <li>Archivo final listo para importar o revisar.</li>
+          <li>Resumen corto de cambios realizados.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Pago</h2>
+        <p>Enviar USDC por Ethereum ERC20 y pegar el tx hash en el formulario.</p>
+        <code>0x534234c114c89b02829655d158034ea98c24a744</code>
+      </section>
+    </main>
+  </body>
+</html>
